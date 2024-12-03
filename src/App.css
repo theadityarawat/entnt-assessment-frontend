@@ -1,0 +1,114 @@
+.App {
+  text-align: center;
+  background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+  font-family: 'Poppins', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.App-logo:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.2));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 15s cubic-bezier(0.42, 0, 0.58, 1);
+  }
+}
+
+.App-header {
+  background-color: #1f2937;
+  color: #f9fafb;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+.App-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: #60a5fa;
+  text-shadow: 2px 2px 8px rgba(96, 165, 250, 0.5);
+}
+
+.App-header p {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #d1d5db;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.App-link {
+  color: #3b82f6;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: color 0.3s ease, text-decoration 0.3s ease;
+  padding: 10px 20px;
+  border: 2px solid #3b82f6;
+  border-radius: 8px;
+  background: transparent;
+  display: inline-block;
+}
+
+.App-link:hover {
+  color: #1d4ed8;
+  background: #3b82f6;
+  text-decoration: underline;
+}
+
+@keyframes App-logo-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  50% {
+    transform: rotate(180deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* General Button Styling */
+button {
+  background: #10b981;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background: #059669;
+  transform: scale(1.05);
+}
+
+button:active {
+  transform: scale(1);
+  background: #047857;
+}
