@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
 import { Button, Modal, Box, TextField, MenuItem, Typography, Divider } from "@mui/material";
-import { Edit, Delete } from "@mui/icons-material"; 
+import { Edit, Delete } from "@mui/icons-material";
 
 const CompanyManagement = () => {
   const [companies, setCompanies] = useState([]);
@@ -21,7 +21,7 @@ const CompanyManagement = () => {
 
   const fetchCompanies = async () => {
     try {
-      const response = await axios.get("https://entnt-backend-i7my.onrender.com/api/companies");
+      const response = await axios.get("https://entnt-assessment-backend.onrender.com/api/companies");
       setCompanies(response.data);
     } catch (error) {
       console.error("Error fetching companies:", error);
@@ -90,11 +90,11 @@ const CompanyManagement = () => {
       try {
         if (currentCompany) {
           await axios.put(
-            `https://entnt-backend-i7my.onrender.com/api/companies/edit/${currentCompany._id}`,
+            `https://entnt-assessment-backend.onrender.com/api/companies/edit/${currentCompany._id}`,
             data
           );
         } else {
-          await axios.post(`https://entnt-backend-i7my.onrender.com/api/companies/add`, data);
+          await axios.post(`https://entnt-assessment-backend.onrender.com/api/companies/add`, data);
         }
         fetchCompanies();
         handleCloseModal();
@@ -109,7 +109,7 @@ const CompanyManagement = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this company?")) {
       try {
-        await axios.delete(`https://entnt-backend-i7my.onrender.com/api/companies/delete/${id}`);
+        await axios.delete(`https://entnt-assessment-backend.onrender.com/api/companies/delete/${id}`);
         fetchCompanies();
       } catch (error) {
         console.error("Error deleting company:", error);

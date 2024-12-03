@@ -17,7 +17,7 @@ const AdminLogin = () => {
   const handleLogin = async () => {
     try {
       const response = await axios.post(
-        "https://entnt-backend-i7my.onrender.com/api/login",
+        "https://enent-aditya-rawat.netlify.app//api/login",
         formData
       );
       localStorage.setItem("token", response.data.token);

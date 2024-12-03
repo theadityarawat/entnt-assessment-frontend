@@ -2,9 +2,6 @@ import React, { useState } from "react";
 import { TextField, Button, Box, Typography, Paper, Divider } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Particles from "react-tsparticles";  // Import Particles component
-import { loadFull } from "tsparticles";  // Load full particle options
-
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -20,16 +17,12 @@ const Register = () => {
 
   const handleRegister = async () => {
     try {
-      const response = await axios.post("https://entnt-backend-i7my.onrender.com/api/register", formData);
+      const response = await axios.post("https://entnt-assessment-backend.onrender.com/api/register", formData);
       console.log(response);
       navigate("/");
     } catch (error) {
       alert("Error registering user: " + (error.response?.data?.error || "An unexpected error occurred."));
     }
-  };
-
-  const particlesInit = async (main) => {
-    await loadFull(main);  // Initialize full particle library
   };
 
   return (
@@ -43,44 +36,6 @@ const Register = () => {
         overflow: "hidden",
       }}
     >
-      {/* Particles Background */}
-      <Particles
-        id="tsparticles"
-        init={particlesInit}
-        options={{
-          fullScreen: { enable: true, zIndex: -1 },  // Make sure particles are in the background
-          particles: {
-            number: {
-              value: 60,  // Number of particles
-              density: {
-                enable: true,
-                value_area: 800,  // Area to contain particles
-              },
-            },
-            shape: {
-              type: "circle",  // Shape of particles
-            },
-            size: {
-              value: 3,  // Size of the particles
-            },
-            move: {
-              enable: true,
-              speed: 1.5,  // Particle speed
-              direction: "random",  // Random direction of particle movement
-              outMode: "out",  // Particles will leave the screen at edges
-            },
-            opacity: {
-              value: 0.5,  // Opacity of particles
-              anim: {
-                enable: true,
-                speed: 1,  // Opacity animation speed
-                opacity_min: 0.1,  // Minimum opacity
-              },
-            },
-          },
-        }}
-      />
-
       {/* Main Content */}
       <Paper
         elevation={6}
@@ -97,7 +52,9 @@ const Register = () => {
           fontWeight="bold"
           textAlign="center"
           gutterBottom
-          sx={{ color: "#7b1fa2", fontFamily: "Roboto, sans-serif" }}
+          sx={{
+            color: "#7b1fa2",
+          }}
         >
           Create Account
         </Typography>
@@ -178,22 +135,32 @@ const Register = () => {
         <Box sx={{ textAlign: "center", marginTop: 3 }}>
           <Typography variant="body1">
             Already have an account?{" "}
-            <Button
-              color="primary"
-              size="small"
-              onClick={() => navigate("/")}
-              sx={{
-                textTransform: "none",
-                padding: 0,
-                color: "#7b1fa2",
-                fontWeight: "bold",
-                "&:hover": { color: "#6a1b9a" },
-                transition: "color 0.3s ease",  // Smooth hover color change
-              }}
-            >
-              Login
-            </Button>
           </Typography>
+
+          {/* Login Button */}
+          <Button
+            variant="outlined"
+            fullWidth
+            onClick={() => navigate("/")}
+            sx={{
+              marginTop: 1,
+              padding: "12px 0",
+              borderColor: "#7b1fa2",
+              color: "#7b1fa2",
+              fontWeight: "bold",
+              fontSize: "1rem",
+              borderRadius: 2.5,
+              boxShadow: "0 6px 12px rgba(123, 31, 162, 0.3)",
+              "&:hover": {
+                background: "#7b1fa2",
+                color: "white",
+                boxShadow: "0 8px 16px rgba(123, 31, 162, 0.4)",
+              },
+              transition: "all 0.3s ease",  // Smooth hover effect
+            }}
+          >
+            Login
+          </Button>
         </Box>
       </Paper>
     </Box>

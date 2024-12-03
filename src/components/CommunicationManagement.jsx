@@ -28,7 +28,7 @@ const CommunicationMethodManagement = () => {
   const fetchMethods = async () => {
     try {
       const response = await axios.get(
-        "https://entnt-backend-i7my.onrender.com/api/communications"
+        "https://enent-aditya-rawat.netlify.app//api/communications"
       );
       setMethods(response.data);
     } catch (error) {
@@ -52,12 +52,12 @@ const CommunicationMethodManagement = () => {
     try {
       if (editId) {
         await axios.put(
-          `https://entnt-backend-i7my.onrender.com/api/communications/${editId}`,
+          `https://enent-aditya-rawat.netlify.app//api/communications/${editId}`,
           form
         );
         setEditId(null);
       } else {
-        await axios.post(`https://entnt-backend-i7my.onrender.com/api/communications`, form);
+        await axios.post(`https://enent-aditya-rawat.netlify.app//api/communications`, form);
       }
       setForm({ name: "", description: "", sequence: "", mandatory: false });
       fetchMethods();
@@ -73,7 +73,7 @@ const CommunicationMethodManagement = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`https://entnt-backend-i7my.onrender.com/api/communications/${id}`);
+      await axios.delete(`https://enent-aditya-rawat.netlify.app//api/communications/${id}`);
       fetchMethods();
     } catch (error) {
       console.error("Failed to delete communication method", error);
@@ -90,7 +90,7 @@ const CommunicationMethodManagement = () => {
           margin: "10px 0",
         }}
       />
-      
+
       <Typography variant="h4" gutterBottom align="center" sx={{ fontWeight: "bold" }}>
         Communication Method Management
       </Typography>
