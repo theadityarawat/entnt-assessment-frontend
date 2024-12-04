@@ -17,41 +17,40 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const UserDashboard = () => {
-  const [communications, setCommunications] = useState([]);
-  const [over, setOver] = useState([]);
-  const [today, setToday] = useState([]);
-  const [openModal, setOpenModal] = useState(false);
-  const [selectedCompanyId, setSelectedCompanyId] = useState([]);
-  const [selected, setSelected] = useState(false);
-  const [rowSelectionModel, setRowSelectionModel] = useState([]);
+  const [records, setRecords] = useState([]);
+  const [pastDue, setPastDue] = useState([]);
+  const [dueToday, setDueToday] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCompanies, setSelectedCompanies] = useState([]);
+  const [isSelected, setIsSelected] = useState(false);
+  const [selectedRows, setSelectedRows] = useState([]);
 
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
+  const handleSignOut = () => {
+    localStorage.clear();
     navigate("/");
   };
 
-  const handleCommunicationPerformed = () => {
-    const selectedIds = rowSelectionModel.map((id) => id.slice(24, id.length));
-    const uniqueCompanies = Array.from(new Set(selectedIds)).map((id) => ({
+  const handleLogAction = () => {
+    const companyIds = selectedRows.map((id) => id.slice(24));
+    const distinctCompanies = Array.from(new Set(companyIds)).map((id) => ({
       name: id,
     }));
-    setSelectedCompanyId(uniqueCompanies);
-    setOpenModal(true);
+    setSelectedCompanies(distinctCompanies);
+    setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
-    setOpenModal(false);
+    setIsModalOpen(false);
   };
 
-  const handleLogCommunication = (data) => {
-    data.company.forEach((el) => {
-      setCommunications((prev) => [
+  const handleSaveCommunication = (data) => {
+    data.company.forEach((item) => {
+      setRecords((prev) => [
         ...prev,
         {
-          company: { name: el.name },
+          company: { name: item.name },
           date: data.date,
           type: { name: data.type },
           notes: data.notes,
@@ -60,51 +59,51 @@ const UserDashboard = () => {
     });
   };
 
-  const fetchCommsFromAPI = async () => {
+  const fetchCommunicationData = async () => {
     try {
       const response = await axios.get(
         "https://entnt-assessment-backend.onrender.com/api/communications-user"
       );
       return response.data;
-    } catch (error) {
-      console.error("Error fetching communications:", error);
+    } catch (err) {
+      console.error("Error fetching communication data:", err);
     }
   };
 
-  const fetchNotificationsFromAPI = async () => {
+  const fetchNotifications = async () => {
     try {
       const response = await axios.get(
         "https://entnt-assessment-backend.onrender.com/api/notifications"
       );
       return response.data;
-    } catch (error) {
-      console.error("Error fetching notifications:", error);
+    } catch (err) {
+      console.error("Error fetching notifications:", err);
     }
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const communicationsData = await fetchCommsFromAPI();
-      setCommunications(communicationsData);
-      const notifications = await fetchNotificationsFromAPI();
-      setOver(notifications.filter((item) => item.type === "overdue"));
-      setToday(notifications.filter((item) => item.type === "due today"));
+    const fetchAllData = async () => {
+      const communications = await fetchCommunicationData();
+      setRecords(communications);
+      const notifications = await fetchNotifications();
+      setPastDue(notifications.filter((n) => n.type === "overdue"));
+      setDueToday(notifications.filter((n) => n.type === "due today"));
     };
-    fetchData();
+    fetchAllData();
   }, []);
 
   const columns = [
     {
       field: "name",
-      headerName: "Company Name",
+      headerName: "Company",
       width: 200,
       renderCell: (params) => (
         <Typography fontWeight="bold">{params.row.company.name}</Typography>
       ),
     },
     {
-      field: "lastCommunications",
-      headerName: "Last Communication",
+      field: "lastInteraction",
+      headerName: "Last Contact",
       width: 300,
       renderCell: (params) => (
         <Typography>
@@ -115,8 +114,8 @@ const UserDashboard = () => {
       ),
     },
     {
-      field: "nextCommunication",
-      headerName: "Next Communication",
+      field: "upcomingInteraction",
+      headerName: "Next Interaction",
       width: 300,
       renderCell: (params) => {
         const nextDate = new Date(params.row.date);
@@ -133,7 +132,7 @@ const UserDashboard = () => {
   return (
     <Box
       sx={{
-        backgroundColor: "#ff66b2", // Magenta color
+        backgroundColor: "#e0f7fa", // Light Cyan
         minHeight: "100vh",
         padding: "2rem",
       }}
@@ -152,15 +151,15 @@ const UserDashboard = () => {
         }}
       >
         <Typography variant="h4" fontWeight="bold" color="text.primary">
-          User Dashboard
+          Dashboard
         </Typography>
         <Button
           variant="contained"
           color="error"
-          onClick={handleLogout}
+          onClick={handleSignOut}
           sx={{ fontWeight: "bold" }}
         >
-          Logout
+          Sign Out
         </Button>
       </Box>
 
@@ -169,11 +168,11 @@ const UserDashboard = () => {
         <Grid item xs={12}>
           <Card elevation={3}>
             <CardHeader
-              title="Communication Calendar"
+              title="Activity Calendar"
               titleTypographyProps={{ fontWeight: "bold" }}
             />
             <CardContent>
-              <CommunicationCalendar communications={communications} />
+              <CommunicationCalendar communications={records} />
             </CardContent>
           </Card>
         </Grid>
@@ -182,21 +181,21 @@ const UserDashboard = () => {
         <Grid item xs={12} md={6}>
           <Card elevation={3}>
             <CardHeader
-              title="Overdue Communications"
+              title="Pending Follow-ups"
               titleTypographyProps={{
                 fontSize: "1.25rem",
                 fontWeight: "bold",
               }}
             />
             <CardContent>
-              {over.length > 0 ? (
-                over.map((item, idx) => (
+              {pastDue.length > 0 ? (
+                pastDue.map((item, idx) => (
                   <Typography key={idx}>
                     {idx + 1}. {item.company.name} - {item.message}
                   </Typography>
                 ))
               ) : (
-                <Typography>No overdue communications</Typography>
+                <Typography>No overdue items</Typography>
               )}
             </CardContent>
           </Card>
@@ -204,21 +203,21 @@ const UserDashboard = () => {
         <Grid item xs={12} md={6}>
           <Card elevation={3}>
             <CardHeader
-              title="Today's Communications"
+              title="Today's Agenda"
               titleTypographyProps={{
                 fontSize: "1.25rem",
                 fontWeight: "bold",
               }}
             />
             <CardContent>
-              {today.length > 0 ? (
-                today.map((item, idx) => (
+              {dueToday.length > 0 ? (
+                dueToday.map((item, idx) => (
                   <Typography key={idx}>
                     {idx + 1}. {item.company.name} - {item.message}
                   </Typography>
                 ))
               ) : (
-                <Typography>No communications due today</Typography>
+                <Typography>No activities scheduled for today</Typography>
               )}
             </CardContent>
           </Card>
@@ -232,21 +231,21 @@ const UserDashboard = () => {
             mb={3}
             color="text.primary"
           >
-            Communication History
+            Communication Records
           </Typography>
           <Paper elevation={3} sx={{ padding: "1rem" }}>
             <div style={{ height: 400, width: "100%" }}>
               <DataGrid
-                rows={communications}
+                rows={records}
                 getRowId={(row) => row._id + row.company.name}
                 columns={columns}
                 pageSize={5}
                 checkboxSelection
-                onRowSelectionModelChange={(newRowSelectionModel) => {
-                  setRowSelectionModel(newRowSelectionModel);
-                  setSelected(newRowSelectionModel.length > 0);
+                onRowSelectionModelChange={(newSelection) => {
+                  setSelectedRows(newSelection);
+                  setIsSelected(newSelection.length > 0);
                 }}
-                rowSelectionModel={rowSelectionModel}
+                rowSelectionModel={selectedRows}
               />
             </div>
           </Paper>
@@ -254,10 +253,10 @@ const UserDashboard = () => {
             <Button
               variant="contained"
               color="primary"
-              disabled={!selected}
-              onClick={handleCommunicationPerformed}
+              disabled={!isSelected}
+              onClick={handleLogAction}
             >
-              Log Communication
+              Add Record
             </Button>
           </Box>
         </Grid>
@@ -265,15 +264,13 @@ const UserDashboard = () => {
 
       {/* Modal */}
       <CommunicationModal
-        open={openModal}
+        open={isModalOpen}
         onClose={handleCloseModal}
-        onSubmit={handleLogCommunication}
-        company={selectedCompanyId}
+        onSubmit={handleSaveCommunication}
+        company={selectedCompanies}
       />
     </Box>
-
   );
 };
-
 
 export default UserDashboard;
