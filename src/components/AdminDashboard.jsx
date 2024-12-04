@@ -8,9 +8,8 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    navigate("/");
+    localStorage.clear(); // Clear all stored data for security
+    navigate("/"); // Redirect to the login page
   };
 
   return (
@@ -18,74 +17,74 @@ const AdminDashboard = () => {
       sx={{
         minHeight: "100vh",
         padding: 4,
-        backgroundColor: "#f5f5f5",
+        backgroundColor: "#eaeaea",
       }}
     >
-      {/* Logout Button */}
+      {/* Logout Section */}
       <Box
         sx={{
           display: "flex",
           justifyContent: "flex-end",
-          mb: 3,
+          mb: 2,
         }}
       >
         <Button
+          onClick={handleLogout}
           variant="contained"
           color="error"
-          size="medium"
-          onClick={handleLogout}
           sx={{
             fontWeight: "bold",
-            padding: "10px 20px",
+            px: 3,
+            py: 1.5,
             fontSize: "14px",
             textTransform: "uppercase",
-            "&:hover": { backgroundColor: "#b71c1c" },
+            "&:hover": { backgroundColor: "#d32f2f" },
           }}
         >
           Logout
         </Button>
       </Box>
 
-      {/* Dashboard Title */}
+      {/* Dashboard Header */}
       <Typography
-        variant="h3"
-        fontWeight="bold"
-        textAlign="center"
+        variant="h4"
+        fontWeight="600"
+        align="center"
         gutterBottom
         sx={{
           textTransform: "uppercase",
-          color: "#424242",
-          marginBottom: 4,
+          color: "#333",
+          marginBottom: 3,
         }}
       >
         Admin Dashboard
       </Typography>
-      <Divider sx={{ marginBottom: 4 }} />
+      <Divider sx={{ marginBottom: 3 }} />
 
-      {/* Components Section */}
+      {/* Dashboard Content */}
       <Box
         sx={{
           display: "grid",
-          gap: 4,
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+          gap: 3,
         }}
       >
         <Box
           sx={{
-            padding: 3,
-            backgroundColor: "#ffffff",
-            borderRadius: 2,
-            boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+            p: 3,
+            backgroundColor: "#fff",
+            borderRadius: "8px",
+            boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
           }}
         >
           <CompanyManagement />
         </Box>
         <Box
           sx={{
-            padding: 3,
-            backgroundColor: "#ffffff",
-            borderRadius: 2,
-            boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+            p: 3,
+            backgroundColor: "#fff",
+            borderRadius: "8px",
+            boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
           }}
         >
           <CommunicationMethodManagement />
